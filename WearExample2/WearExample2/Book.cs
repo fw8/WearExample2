@@ -7,10 +7,14 @@ namespace WearExample2
     public class Book
     {
         private int currentPage;
+        private List<int> history;
         private List<Page> pages;
 
         public Book()
         {
+            // Historie erzeugen
+            history = new List<int>();
+
             // Buch (Liste von Blaettern) erzeugen
             pages = new List<Page>();
 
@@ -50,25 +54,28 @@ namespace WearExample2
 
             Page np = pages[nextPage];
             currentPage = nextPage; // Seite merken
+            history.Add(nextPage);
             return (np);
         }
 
-        // Seite x zurückgeben
+        // Seite an Position x in der Historie zurückgeben
         public Page GetPageAt(int x)
         {
-            return pages[x];
+            return pages[history[x]];
         }
 
         // Anzahl Seiten zurückgeben
         public int NumPages()
         {
-            return pages.Count;
+            return history.Count;
         }
 
         // Buch auf Anfang zurueck setzen
         public void Reset()
         {
             currentPage = 0;
+            history.Clear();
+            history.Add(0);
         }
 
     }
