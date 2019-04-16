@@ -13,7 +13,7 @@ using Android.Support.Wearable.Activity;
 using Java.Interop;
 using Android.Views.Animations;
 using Android.Support.V7.Widget;
-
+using Android.Util;
 
 namespace WearExample2
 {
@@ -22,7 +22,7 @@ namespace WearExample2
     {
         RecyclerView mRecyclerView;
         private RecyclerView.LayoutManager mLayoutManager;
-        private Book book = new Book();
+        public Book book = new Book();
         private BookAdapter mAdapter;
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -38,9 +38,34 @@ namespace WearExample2
             mRecyclerView.SetLayoutManager(mLayoutManager);
 
             // Plug in my adapter:
-            mAdapter = new BookAdapter(book);
+            mAdapter = new BookAdapter(this);
             mRecyclerView.SetAdapter(mAdapter);
         }
-    }
 
+        public void YesBtnClick(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            int position = (int)b.GetTag(Resource.Id.listItemYesButton);
+
+            Log.Debug("Button", "Yes at position: " + position);
+
+            // if position not last pos, then delete everything after
+            // then get next page and do refresh
+            book.GetNextPage(YesNoEnum.Yes);
+            mAdapter.NotifyDataSetChanged();
+            mRecyclerView.SmoothScrollToPosition(position + 1);
+        }
+
+        public void NoBtnClick(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            int position = (int)b.GetTag(Resource.Id.listItemNoButton);
+
+            Log.Debug("Button", "No at position: " + position);
+
+            book.GetNextPage(YesNoEnum.No);
+            mAdapter.NotifyDataSetChanged();
+            mRecyclerView.SmoothScrollToPosition(position + 1);
+        }
+    }
 }

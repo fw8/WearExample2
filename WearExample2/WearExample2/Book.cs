@@ -7,31 +7,34 @@ namespace WearExample2
     public class Book
     {
         private int currentPage;
-        private List<int> history;
+        private List<int> pageHistory;
+        private List<YesNoEnum> answerHistory;
         private List<Page> pages;
 
         public Book()
         {
             // Historie erzeugen
-            history = new List<int>();
+            pageHistory = new List<int>();
+            answerHistory = new List<YesNoEnum>();
 
             // Buch (Liste von Blaettern) erzeugen
-            pages = new List<Page>();
+            pages = new List<Page>
+            {
+                // Seite 0 / geschmeckt?
+                new Page() { pageType = PageTypeEnum.Query, text = "Hat es geschmeckt?", nextIfNo = 2, nextIfYes = 1 },
 
-            // Seite 0 / geschmeckt?
-            pages.Add(new Page() { pageType = PageTypeEnum.Query, text = "Hat es geschmeckt?", nextIfNo = 2, nextIfYes = 1 });
+                // Seite 1 / geschmeckt / ja / mehr?
+                new Page() { pageType = PageTypeEnum.Query, text = "OK, möchtest Du mehr?", nextIfNo = 2, nextIfYes = 0 },
 
-            // Seite 1 / geschmeckt / ja / mehr?
-            pages.Add(new Page() { pageType = PageTypeEnum.Query, text = "OK, möchtest Du mehr?", nextIfNo = 2, nextIfYes = 0 });
+                // Seite 2 / geschmeckt / nein / nachtisch?
+                new Page() { pageType = PageTypeEnum.Query, text = "Schade, trotzdem noch Nachtisch?", nextIfNo = 4, nextIfYes = 3 },
 
-            // Seite 2 / geschmeckt / nein / nachtisch?
-            pages.Add(new Page() { pageType = PageTypeEnum.Query, text = "Schade, trotzdem noch Nachtisch?", nextIfNo = 4, nextIfYes = 3 });
+                // Seite 3 / nachtisch / ja
+                new Page() { pageType = PageTypeEnum.Answer, text = "Alles klar, guten Appetit!", nextIfNo = 0, nextIfYes = 0 },
 
-            // Seite 3 / nachtisch / ja
-            pages.Add(new Page() { pageType = PageTypeEnum.Answer, text = "Alles klar, guten Appetit!", nextIfNo = 0, nextIfYes = 0 });
-
-            // Seite 4 / nachtisch / nein
-            pages.Add(new Page() { pageType = PageTypeEnum.Answer, text = "Schade!", nextIfNo = 0, nextIfYes = 0 });
+                // Seite 4 / nachtisch / nein
+                new Page() { pageType = PageTypeEnum.Answer, text = "Schade!", nextIfNo = 0, nextIfYes = 0 }
+            };
 
             Reset(); // Buch auf Anfang setzten
         }
@@ -53,29 +56,36 @@ namespace WearExample2
             }
 
             Page np = pages[nextPage];
-            currentPage = nextPage; // Seite merken
-            history.Add(nextPage);
+            //currentPage = nextPage; 
+            pageHistory.Add(nextPage); // Seite merken
+            answerHistory.Add(answer); // Antwort merken
             return (np);
         }
 
         // Seite an Position x in der Historie zurückgeben
-        public Page GetPageAt(int x)
+        public Page GetPageAt(int i)
         {
-            return pages[history[x]];
+            return pages[pageHistory[i]];
         }
 
-        // Anzahl Seiten zurückgeben
+        public YesNoEnum GetAnswerAt(int i)
+        {
+            return answerHistory[i];
+        }
+
+        // Anzahl Seiten in der Historie zurückgeben
         public int NumPages()
         {
-            return history.Count;
+            return pageHistory.Count;
         }
 
         // Buch auf Anfang zurueck setzen
         public void Reset()
         {
             currentPage = 0;
-            history.Clear();
-            history.Add(0);
+            pageHistory.Clear();
+            pageHistory.Add(0);
+            answerHistory.Clear();
         }
 
     }

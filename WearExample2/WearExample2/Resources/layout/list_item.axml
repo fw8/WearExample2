@@ -34,7 +34,7 @@
                 android:orientation="horizontal">
             
                 <Button
-                    android:id="@+id/queryYesButton"
+                    android:id="@+id/listItemYesButton"
                     android:text="Ja"
                     android:background="@color/green"
                     android:layout_weight="1"
@@ -43,7 +43,7 @@
                 />
 
                 <Button
-                    android:id="@+id/queryNoButton"
+                    android:id="@+id/listItemNoButton"
                     android:text="Nein"
                     android:background="@color/red"
                     android:layout_weight="1"

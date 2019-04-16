@@ -1633,8 +1633,14 @@ namespace WearExample2
 			// aapt resource value: 0x7f0d0005
 			public const int line3 = 2131558405;
 			
+			// aapt resource value: 0x7f0d003b
+			public const int listItemNoButton = 2131558459;
+			
 			// aapt resource value: 0x7f0d0039
 			public const int listItemTextView = 2131558457;
+			
+			// aapt resource value: 0x7f0d003a
+			public const int listItemYesButton = 2131558458;
 			
 			// aapt resource value: 0x7f0d0045
 			public const int media_actions = 2131558469;
@@ -1671,12 +1677,6 @@ namespace WearExample2
 			
 			// aapt resource value: 0x7f0d0033
 			public const int parentPanel = 2131558451;
-			
-			// aapt resource value: 0x7f0d003b
-			public const int queryNoButton = 2131558459;
-			
-			// aapt resource value: 0x7f0d003a
-			public const int queryYesButton = 2131558458;
 			
 			// aapt resource value: 0x7f0d000d
 			public const int right = 2131558413;
