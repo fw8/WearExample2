@@ -84,11 +84,13 @@ namespace WearExample2
             {
                 if (mBook.GetAnswerAt(position) == YesNoEnum.Yes)
                 {
+                    Log.Debug("OnBindViewHolder", string.Format("Answer at position {0} was Yes", position));
                     vh.yesBtn.SetBackgroundColor(Android.Graphics.Color.Green);
                     vh.noBtn.SetBackgroundColor(Android.Graphics.Color.Gray);
                 }
                 else
                 {
+                    Log.Debug("OnBindViewHolder", string.Format("Answer at position {0} was No", position));
                     vh.yesBtn.SetBackgroundColor(Android.Graphics.Color.Gray);
                     vh.noBtn.SetBackgroundColor(Android.Graphics.Color.Red);
                 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Android.Util;
 
 namespace WearExample2
 {
@@ -6,16 +8,20 @@ namespace WearExample2
 
     public class Book
     {
-        private int currentPage;
-        private List<int> pageHistory;
-        private List<YesNoEnum> answerHistory;
+        // In der Historie merken wir und die Seite (Frage) und die Antwort auf diese Frage
+        private class History
+        {
+            public int page;
+            public YesNoEnum answer;
+        }
+
+        private List<History> history;
         private List<Page> pages;
 
         public Book()
         {
             // Historie erzeugen
-            pageHistory = new List<int>();
-            answerHistory = new List<YesNoEnum>();
+            history = new List<History>();
 
             // Buch (Liste von Blaettern) erzeugen
             pages = new List<Page>
@@ -42,51 +48,69 @@ namespace WearExample2
         // Aktuelle Seite liefern
         public Page GetCurrentPage()
         {
-            return pages[currentPage];
+            return pages[history.Last().page];
         }
 
         // Zur naechsten Seite blaettern gemaess Kontext (Ja/Nein)
         public Page GetNextPage(YesNoEnum answer)
         {
-            int nextPage = pages[currentPage].nextIfNo;
+            var lastInHistory = history.Last().page;
+            int nextPage = pages[lastInHistory].nextIfNo;
 
             if (answer == YesNoEnum.Yes)
             {
-                nextPage = pages[currentPage].nextIfYes;
+                nextPage = pages[lastInHistory].nextIfYes;
             }
 
             Page np = pages[nextPage];
-            //currentPage = nextPage; 
-            pageHistory.Add(nextPage); // Seite merken
-            answerHistory.Add(answer); // Antwort merken
+
+            history.Last().answer = answer; // Antwort für aktuelle Position merken
+
+            History h = new History(); // Neue Position erzeugen und Seite merken
+            h.page = nextPage;
+            history.Add(h);
             return (np);
         }
 
-        // Seite an Position x in der Historie zurückgeben
+        // Seite an Position i in der Historie zurueckgeben
         public Page GetPageAt(int i)
         {
-            return pages[pageHistory[i]];
+            return pages[history[i].page];
         }
 
+        // Antwort an Position i in der Historie zurueckgeben
         public YesNoEnum GetAnswerAt(int i)
         {
-            return answerHistory[i];
+            return history[i].answer;
         }
 
-        // Anzahl Seiten in der Historie zurückgeben
+        // Historie hinter der Position i löschen
+        public void RemoveBehind(int i)
+        {
+            var behind = i + 1;
+            var numberOfItems = history.Count - i - 1;
+            Log.Debug("Book", string.Format("Remove {0} pages behind position {1}", numberOfItems, i));
+
+            if (i + 1 < history.Count()) // sind wir nicht am Ende der History?
+            {
+                // dann den Rest abschneiden
+                history.RemoveRange(behind, numberOfItems);
+            }
+        }
+
+        // Anzahl Seiten in der Historie zurueckgeben
         public int NumPages()
         {
-            return pageHistory.Count;
+            return history.Count;
         }
 
-        // Buch auf Anfang zurueck setzen
+        // Historie auf Anfang zurueck setzen
         public void Reset()
         {
-            currentPage = 0;
-            pageHistory.Clear();
-            pageHistory.Add(0);
-            answerHistory.Clear();
+            history.Clear();
+            History h = new History();
+            h.page = 0;
+            history.Add(h);
         }
-
     }
 }

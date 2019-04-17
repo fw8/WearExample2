@@ -49,9 +49,10 @@ namespace WearExample2
 
             Log.Debug("Button", "Yes at position: " + position);
 
-            // if position not last pos, then delete everything after
-            // then get next page and do refresh
+            book.RemoveBehind(position);
+
             book.GetNextPage(YesNoEnum.Yes);
+
             mAdapter.NotifyDataSetChanged();
             mRecyclerView.SmoothScrollToPosition(position + 1);
         }
@@ -63,7 +64,10 @@ namespace WearExample2
 
             Log.Debug("Button", "No at position: " + position);
 
+            book.RemoveBehind(position);
+
             book.GetNextPage(YesNoEnum.No);
+
             mAdapter.NotifyDataSetChanged();
             mRecyclerView.SmoothScrollToPosition(position + 1);
         }
